@@ -12,7 +12,6 @@ REPO="githendrik/hue-panel"
 
 echo "==> Installing hue-panel..."
 
-# Detect latest release tag
 LATEST=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
   | grep '"tag_name"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
 
@@ -21,7 +20,6 @@ echo "==> Latest release: ${LATEST}"
 ARCHIVE="hue-panel-linux-x64.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${LATEST}/${ARCHIVE}"
 
-# Download and extract
 TMP=$(mktemp -d)
 curl -fsSL "$URL" -o "$TMP/$ARCHIVE"
 
@@ -30,10 +28,8 @@ tar -xzf "$TMP/$ARCHIVE" -C "$INSTALL_DIR"
 chmod +x "$INSTALL_DIR/$BINARY_NAME"
 rm -rf "$TMP"
 
-echo "==> Installed to $INSTALL_DIR"
+echo "==> Installed to $INSTALL_DIR/$BINARY_NAME"
 
-# Install systemd service
-# The binary must run from INSTALL_DIR so it can find node_modules/ there
 cat > /etc/systemd/system/${SERVICE_NAME}.service <<EOF
 [Unit]
 Description=Hue Vacation Panel

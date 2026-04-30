@@ -34,54 +34,29 @@ jobs:
 
       - name: Compile binary (linux-x64)
         run: |
+          # Symlink .output/server/node_modules into every chunk subdirectory
+          # so bun's module resolver can find packages when traversing upward
+          # from chunks/build/, chunks/_/, etc.
+          for dir in .output/server/chunks/*/; do
+            ln -s "$(pwd)/.output/server/node_modules" "${dir}node_modules" 2>/dev/null || true
+          done
           cd .output/server
           bun build index.mjs \
             --compile \
             --target=bun-linux-x64 \
-            --external "@babel/parser" \
-            --external "@vue/compiler-core" \
-            --external "@vue/compiler-dom" \
-            --external "@vue/compiler-ssr" \
-            --external "@vue/devtools-api" \
-            --external "@vue/reactivity" \
-            --external "@vue/runtime-core" \
-            --external "@vue/runtime-dom" \
-            --external "@vue/server-renderer" \
-            --external "@vue/shared" \
-            --external "anymatch" \
-            --external "chokidar" \
-            --external "devalue" \
-            --external "entities" \
-            --external "estree-walker" \
-            --external "hookable" \
-            --external "normalize-path" \
-            --external "perfect-debounce" \
-            --external "picomatch" \
-            --external "readdirp" \
-            --external "source-map-js" \
-            --external "ufo" \
-            --external "unhead" \
-            --external "vue" \
-            --external "vue-bundle-renderer" \
-            --external "vue-router" \
             --outfile hue-panel
 
       - name: Smoke test binary
-        # Run from .output/server so bun resolves externals from node_modules there
         run: |
-          cd .output/server && ./hue-panel &
+          .output/server/hue-panel &
           sleep 2
           curl -sf http://localhost:3000/api/bridge | grep -q "configured"
           kill %1
 
       - name: Create release archive
-        # The binary must be run from a directory containing node_modules/.
-        # We bundle everything together so the install script can place them correctly.
         run: |
-          mkdir -p release/node_modules
-          cp .output/server/hue-panel install.sh release/
-          cp -r .output/server/node_modules/. release/node_modules/
-          tar -czf hue-panel-linux-x64.tar.gz -C release .
+          cp install.sh .output/server/
+          tar -czf hue-panel-linux-x64.tar.gz -C .output/server hue-panel install.sh
           sha256sum hue-panel-linux-x64.tar.gz > hue-panel-linux-x64.tar.gz.sha256
 
       - name: Publish GitHub Release
