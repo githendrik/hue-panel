@@ -24,17 +24,16 @@ URL="https://github.com/${REPO}/releases/download/${LATEST}/${ARCHIVE}"
 # Download and extract
 TMP=$(mktemp -d)
 curl -fsSL "$URL" -o "$TMP/$ARCHIVE"
-tar -xzf "$TMP/$ARCHIVE" -C "$TMP"
 
-# Install binary
 mkdir -p "$INSTALL_DIR" "$DATA_DIR"
-cp "$TMP/$BINARY_NAME" "$INSTALL_DIR/$BINARY_NAME"
+tar -xzf "$TMP/$ARCHIVE" -C "$INSTALL_DIR"
 chmod +x "$INSTALL_DIR/$BINARY_NAME"
 rm -rf "$TMP"
 
-echo "==> Binary installed to $INSTALL_DIR/$BINARY_NAME"
+echo "==> Installed to $INSTALL_DIR"
 
 # Install systemd service
+# The binary must run from INSTALL_DIR so it can find node_modules/ there
 cat > /etc/systemd/system/${SERVICE_NAME}.service <<EOF
 [Unit]
 Description=Hue Vacation Panel

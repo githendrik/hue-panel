@@ -1,6 +1,10 @@
 #!/bin/sh
 # build-binary.sh — build a self-contained hue-panel binary for linux-x64
 # Requires: node (for nuxt build), bun (for compilation)
+#
+# The binary relies on .output/server/node_modules/ at runtime (Vue SSR chunks).
+# Run the binary from .output/server/ or copy both the binary AND node_modules/
+# to the same directory on your target machine (the install.sh does this).
 set -e
 
 echo "==> Building Nuxt..."
@@ -36,9 +40,9 @@ cd .output/server && bun build index.mjs \
   --external "vue" \
   --external "vue-bundle-renderer" \
   --external "vue-router" \
-  --outfile ../../hue-panel
-cd ../..
+  --outfile hue-panel
 
 echo ""
-echo "==> Done: ./hue-panel ($(du -sh hue-panel | cut -f1))"
-echo "    Copy to your LXC and run it directly — no Node/Bun/npm needed."
+echo "==> Done: .output/server/hue-panel ($(du -sh .output/server/hue-panel | cut -f1))"
+echo "    Run with: cd .output/server && ./hue-panel"
+echo "    Or copy both hue-panel and node_modules/ to the same dir on your LXC."

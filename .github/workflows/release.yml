@@ -34,7 +34,8 @@ jobs:
 
       - name: Compile binary (linux-x64)
         run: |
-          cd .output/server && bun build index.mjs \
+          cd .output/server
+          bun build index.mjs \
             --compile \
             --target=bun-linux-x64 \
             --external "@babel/parser" \
@@ -63,18 +64,24 @@ jobs:
             --external "vue" \
             --external "vue-bundle-renderer" \
             --external "vue-router" \
-            --outfile ../../hue-panel
+            --outfile hue-panel
 
       - name: Smoke test binary
+        # Run from .output/server so bun resolves externals from node_modules there
         run: |
-          ./hue-panel &
+          cd .output/server && ./hue-panel &
           sleep 2
           curl -sf http://localhost:3000/api/bridge | grep -q "configured"
           kill %1
 
       - name: Create release archive
+        # The binary must be run from a directory containing node_modules/.
+        # We bundle everything together so the install script can place them correctly.
         run: |
-          tar -czf hue-panel-linux-x64.tar.gz hue-panel install.sh
+          mkdir -p release/node_modules
+          cp .output/server/hue-panel install.sh release/
+          cp -r .output/server/node_modules/. release/node_modules/
+          tar -czf hue-panel-linux-x64.tar.gz -C release .
           sha256sum hue-panel-linux-x64.tar.gz > hue-panel-linux-x64.tar.gz.sha256
 
       - name: Publish GitHub Release
