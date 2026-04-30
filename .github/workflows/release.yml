@@ -34,13 +34,8 @@ jobs:
 
       - name: Compile binary (linux-x64)
         run: |
-          # Symlink .output/server/node_modules into every chunk subdirectory
-          # so bun's module resolver can find packages when traversing upward
-          # from chunks/build/, chunks/_/, etc.
-          for dir in .output/server/chunks/*/; do
-            ln -s "$(pwd)/.output/server/node_modules" "${dir}node_modules" 2>/dev/null || true
-          done
           cd .output/server
+          bun install --frozen-lockfile 2>/dev/null || bun install
           bun build index.mjs \
             --compile \
             --target=bun-linux-x64 \

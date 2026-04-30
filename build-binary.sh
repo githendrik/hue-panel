@@ -3,13 +3,8 @@
 # Requires: node (for nuxt build), bun (for compilation)
 set -e
 
-echo "==> Building Nuxt..."
+echo "==> Building Nuxt (SPA mode, no SSR)..."
 npm run build
-
-echo "==> Symlinking node_modules into chunk subdirectories..."
-for dir in .output/server/chunks/*/; do
-  ln -sf "$(pwd)/.output/server/node_modules" "${dir}node_modules" 2>/dev/null || true
-done
 
 echo "==> Compiling binary (linux-x64)..."
 cd .output/server && bun build index.mjs \
