@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  hue-panel:
+    build: .
+    container_name: hue-panel
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - HUE_STORAGE_PATH=/app/data
+      - PORT=3000
+      - HOST=0.0.0.0
+    volumes:
+      - hue-data:/app/data
+
+volumes:
+  hue-data:

@@ -1,0 +1,18 @@
+# Nuxt / Nitro build output
+.nuxt/
+.output/
+
+# Dependencies
+node_modules/
+
+# Data (bridge config + timers — contains API keys, do not commit)
+data/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Misc
+.DS_Store
+*.log
