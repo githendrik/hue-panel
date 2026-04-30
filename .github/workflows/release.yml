@@ -53,4 +53,5 @@ jobs:
           files: |
             hue-panel-linux-x64.tar.gz
             hue-panel-linux-x64.tar.gz.sha256
+            install.sh
           generate_release_notes: true
