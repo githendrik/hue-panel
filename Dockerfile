@@ -1,4 +1,4 @@
-# ── Build stage ──────────────────────────────────────────────────────────────
+# ── Build stage ───────────────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -22,9 +22,9 @@ ENV HUE_STORAGE_PATH=/app/data
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
-# Copy only the Nuxt standalone output
-COPY --from=builder /app/.output ./
+# Copy the Nitro standalone output (server + public assets)
+COPY --from=builder /app/.output .output/
 
 EXPOSE 3000
 
-CMD ["node", "server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]
