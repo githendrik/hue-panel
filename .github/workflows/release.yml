@@ -32,26 +32,19 @@ jobs:
       - name: Build Nuxt
         run: npm run build
 
-      - name: Compile binary (linux-x64)
+      - name: Smoke test
         run: |
-          cd .output/server
-          bun install --frozen-lockfile 2>/dev/null || bun install
-          bun build index.mjs \
-            --compile \
-            --target=bun-linux-x64 \
-            --outfile hue-panel
-
-      - name: Smoke test binary
-        run: |
-          .output/server/hue-panel &
+          node .output/server/index.mjs &
           sleep 2
           curl -sf http://localhost:3000/api/bridge | grep -q "configured"
           kill %1
 
       - name: Create release archive
+        # Bundle the full .output/ folder + install script.
+        # The LXC only needs Bun (or Node) installed — no npm, no build step.
         run: |
-          cp install.sh .output/server/
-          tar -czf hue-panel-linux-x64.tar.gz -C .output/server hue-panel install.sh
+          cp install.sh .output/
+          tar -czf hue-panel-linux-x64.tar.gz -C .output .
           sha256sum hue-panel-linux-x64.tar.gz > hue-panel-linux-x64.tar.gz.sha256
 
       - name: Publish GitHub Release

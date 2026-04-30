@@ -7,11 +7,21 @@ set -e
 INSTALL_DIR="/opt/hue-panel"
 DATA_DIR="/opt/hue-panel/data"
 SERVICE_NAME="hue-panel"
-BINARY_NAME="hue-panel"
 REPO="githendrik/hue-panel"
 
 echo "==> Installing hue-panel..."
 
+# ── Install Bun if not present ─────────────────────────────────────────────
+if ! command -v bun >/dev/null 2>&1; then
+  echo "==> Installing Bun runtime..."
+  curl -fsSL https://bun.sh/install | bash
+  export PATH="$HOME/.bun/bin:$PATH"
+fi
+
+BUN_BIN=$(command -v bun)
+echo "==> Using Bun: $($BUN_BIN --version) at $BUN_BIN"
+
+# ── Download latest release ────────────────────────────────────────────────
 LATEST=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
   | grep '"tag_name"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
 
@@ -25,11 +35,11 @@ curl -fsSL "$URL" -o "$TMP/$ARCHIVE"
 
 mkdir -p "$INSTALL_DIR" "$DATA_DIR"
 tar -xzf "$TMP/$ARCHIVE" -C "$INSTALL_DIR"
-chmod +x "$INSTALL_DIR/$BINARY_NAME"
 rm -rf "$TMP"
 
-echo "==> Installed to $INSTALL_DIR/$BINARY_NAME"
+echo "==> Extracted to $INSTALL_DIR"
 
+# ── Install systemd service ────────────────────────────────────────────────
 cat > /etc/systemd/system/${SERVICE_NAME}.service <<EOF
 [Unit]
 Description=Hue Vacation Panel
@@ -38,7 +48,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=${INSTALL_DIR}
-ExecStart=${INSTALL_DIR}/${BINARY_NAME}
+ExecStart=${BUN_BIN} run ${INSTALL_DIR}/server/index.mjs
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
