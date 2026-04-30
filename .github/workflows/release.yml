@@ -37,14 +37,32 @@ jobs:
           cd .output/server && bun build index.mjs \
             --compile \
             --target=bun-linux-x64 \
-            --external "@vue/shared" \
-            --external "@vue/server-renderer" \
-            --external "@vue/compiler-dom" \
-            --external "@vue/runtime-dom" \
+            --external "@babel/parser" \
             --external "@vue/compiler-core" \
-            --external "@vue/runtime-core" \
+            --external "@vue/compiler-dom" \
+            --external "@vue/compiler-ssr" \
+            --external "@vue/devtools-api" \
             --external "@vue/reactivity" \
+            --external "@vue/runtime-core" \
+            --external "@vue/runtime-dom" \
+            --external "@vue/server-renderer" \
+            --external "@vue/shared" \
+            --external "anymatch" \
+            --external "chokidar" \
+            --external "devalue" \
+            --external "entities" \
+            --external "estree-walker" \
+            --external "hookable" \
+            --external "normalize-path" \
+            --external "perfect-debounce" \
+            --external "picomatch" \
+            --external "readdirp" \
+            --external "source-map-js" \
+            --external "ufo" \
+            --external "unhead" \
             --external "vue" \
+            --external "vue-bundle-renderer" \
+            --external "vue-router" \
             --outfile ../../hue-panel
 
       - name: Smoke test binary
