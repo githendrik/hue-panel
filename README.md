@@ -2,7 +2,9 @@
 
 A lightweight self-hosted web app to schedule **vacation lighting timers** for your Philips Hue setup. Randomise on/off times to make it look like someone's home.
 
-![Dashboard screenshot placeholder](https://placehold.co/860x400/1e293b/f59e0b?text=Hue+Vacation+Panel)
+![Mobile view](docs/screenshot-mobile.png)
+
+*Mobile view — Responsive design with compact header (💡 only) and touch-friendly controls.*
 
 ## Features
 
@@ -13,6 +15,12 @@ A lightweight self-hosted web app to schedule **vacation lighting timers** for y
 - **Target lights or whole rooms/zones**
 - **Runs locally** — no Philips cloud account needed after pairing
 - **Tiny footprint** — single Node process, ~2 MB, SQLite-free (JSON storage)
+
+## Screenshots
+
+| Dashboard | Timers | Setup |
+|-----------|--------|-------|
+| ![Dashboard](docs/screenshot-dashboard.png) | ![Timers](docs/screenshot-timers.png) | ![Setup](docs/screenshot-setup.png) |
 
 ---
 
