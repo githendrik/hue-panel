@@ -52,17 +52,7 @@ cd hue-panel
 docker compose up -d --build
 ```
 
-Or pull and run directly:
-
-```sh
-docker run -d \
-  --name hue-panel \
-  --restart unless-stopped \
-  -p 3000:3000 \
-  -v hue-data:/app/data \
-  -e HUE_STORAGE_PATH=/app/data \
-  ghcr.io/githendrik/hue-panel:latest   # if published to GHCR
-```
+Open **http://localhost:3000**
 
 ---
 
