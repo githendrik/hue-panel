@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <header class="header">
-      <span class="logo">💡 Hue Vacation Panel</span>
+      <span class="logo">💡 <span class="logo-text">Hue Vacation Panel</span></span>
       <nav>
         <NuxtLink to="/">Dashboard</NuxtLink>
         <NuxtLink to="/timers">Timers</NuxtLink>
@@ -36,10 +36,22 @@ body {
 }
 
 .logo { font-size: 1.1rem; font-weight: 700; color: #f59e0b; }
+.logo-text { display: inline; }
+
+/* Hide text on mobile, show only the bulb */
+@media (max-width: 600px) {
+  .logo-text { display: none; }
+  .header { padding: 0.75rem 1rem; }
+}
 
 nav { display: flex; gap: 1.5rem; }
 nav a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color .2s; }
 nav a:hover, nav a.router-link-active { color: #f8fafc; }
+
+@media (max-width: 600px) {
+  nav { gap: 0.75rem; }
+  nav a { font-size: 0.8rem; }
+}
 
 .content { flex: 1; padding: 2rem; max-width: 900px; margin: 0 auto; width: 100%; }
 
