@@ -14,9 +14,9 @@ A lightweight self-hosted web app to schedule **vacation lighting timers** for y
 
 ## Screenshots
 
-| Dashboard | Timers | Setup |
-|-----------|--------|-------|
-| ![Dashboard](docs/screenshot-dashboard.png) | ![Timers](docs/screenshot-timers.png) | ![Setup](docs/screenshot-setup.png) |
+| Dashboard | Timers | Timer Modal | Setup |
+|-----------|--------|-------------|-------|
+| ![Dashboard](docs/screenshot-dashboard.png) | ![Timers](docs/screenshot-timers.png) | ![Timer Modal](docs/screenshot-timer-modal.png) | ![Setup](docs/screenshot-setup.png) |
 
 ---
 
