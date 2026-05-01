@@ -2,10 +2,6 @@
 
 A lightweight self-hosted web app to schedule **vacation lighting timers** for your Philips Hue setup. Randomise on/off times to make it look like someone's home.
 
-![Mobile view](docs/screenshot-mobile.png)
-
-*Mobile view — Responsive design with compact header (💡 only) and touch-friendly controls.*
-
 ## Features
 
 - **Auto-discover** your Hue bridge (Philips cloud, mDNS, local probe)
