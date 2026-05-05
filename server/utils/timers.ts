@@ -25,6 +25,9 @@ export interface VacationTimer {
   enabled: boolean
   /** Optional ±minutes random offset to make lighting look natural */
   randomOffsetMinutes: number
+  /** Optional date range for when this timer is active (ISO date strings "YYYY-MM-DD") */
+  startDate?: string
+  endDate?: string
 }
 
 export async function getTimers(): Promise<VacationTimer[]> {

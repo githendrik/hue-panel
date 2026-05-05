@@ -16,6 +16,8 @@ export default defineEventHandler(async (event) => {
     days: body.days ?? [0, 1, 2, 3, 4, 5, 6],
     enabled: body.enabled ?? true,
     randomOffsetMinutes: body.randomOffsetMinutes ?? 0,
+    startDate: body.startDate ?? undefined,
+    endDate: body.endDate ?? undefined,
   }
 
   await upsertTimer(timer)

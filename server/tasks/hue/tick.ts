@@ -48,11 +48,15 @@ export default defineTask({
     const now = new Date()
     const currentDay = now.getDay()           // 0=Sun … 6=Sat
     const currentHHmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+    const today = now.toISOString().split('T')[0] // "YYYY-MM-DD"
 
     const fired: string[] = []
 
     for (const timer of enabled) {
       if (!timer.days.includes(currentDay)) continue
+
+      if (timer.startDate && today < timer.startDate) continue
+      if (timer.endDate && today > timer.endDate) continue
 
       if (timer.onTime === currentHHmm) {
         await toggleLights(timer.lightIds, timer.groupIds, true, config.ip, config.apiKey)

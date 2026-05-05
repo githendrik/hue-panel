@@ -22,6 +22,7 @@
         <span v-if="t.lightIds.length">Lights: {{ t.lightIds.length }}</span>
         <span v-if="t.groupIds.length" style="margin-left:.75rem">Groups: {{ t.groupIds.length }}</span>
         <span v-if="t.randomOffsetMinutes" style="margin-left:.75rem">±{{ t.randomOffsetMinutes }}min random</span>
+        <span v-if="t.startDate || t.endDate" style="margin-left:.75rem">📅 {{ t.startDate || '…' }} to {{ t.endDate || '…' }}</span>
       </div>
     </div>
 
@@ -41,6 +42,17 @@
           <div>
             <label>Turn OFF at</label>
             <input v-model="form.offTime" type="time" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label>Start date (optional)</label>
+            <input v-model="form.startDate" type="date" />
+          </div>
+          <div>
+            <label>End date (optional)</label>
+            <input v-model="form.endDate" type="date" />
           </div>
         </div>
 
@@ -109,6 +121,8 @@ const emptyForm = (): Partial<VacationTimer> => ({
   name: '',
   onTime: '18:00',
   offTime: '23:00',
+  startDate: '',
+  endDate: '',
   days: [0, 1, 2, 3, 4, 5, 6],
   lightIds: [],
   groupIds: [],
