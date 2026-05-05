@@ -27,6 +27,13 @@ LATEST=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
 
 echo "==> Latest release: ${LATEST}"
 
+# Check existing version before upgrade
+INSTALLED_VERSION=""
+if [ -f "$INSTALL_DIR/package.json" ]; then
+  INSTALLED_VERSION=$(grep '"version"' "$INSTALL_DIR/package.json" | sed 's/.*"version": "\(.*\)".*/\1/')
+  echo "==> Installed version: ${INSTALLED_VERSION}"
+fi
+
 ARCHIVE="hue-panel-linux-x64.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${LATEST}/${ARCHIVE}"
 
@@ -38,6 +45,13 @@ tar -xzf "$TMP/$ARCHIVE" -C "$INSTALL_DIR"
 rm -rf "$TMP"
 
 echo "==> Extracted to $INSTALL_DIR"
+
+# Check if this is an upgrade and restart service if needed
+NEW_VERSION=$(grep '"version"' "$INSTALL_DIR/package.json" | sed 's/.*"version": "\(.*\)".*/\1/')
+if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$NEW_VERSION" ]; then
+  echo "==> Upgrading from ${INSTALLED_VERSION} to ${NEW_VERSION} - restarting service..."
+  systemctl restart "$SERVICE_NAME"
+fi
 
 # ── Install systemd service ────────────────────────────────────────────────
 cat > /etc/systemd/system/${SERVICE_NAME}.service <<EOF
