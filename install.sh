@@ -49,12 +49,6 @@ echo "$LATEST" > "$INSTALL_DIR/VERSION"
 
 echo "==> Extracted to $INSTALL_DIR"
 
-# Check if this is an upgrade and restart service if needed
-if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$LATEST" ]; then
-  echo "==> Upgrading from ${INSTALLED_VERSION} to ${LATEST} - restarting service..."
-  systemctl restart "$SERVICE_NAME"
-fi
-
 # ── Install systemd service ────────────────────────────────────────────────
 cat > /etc/systemd/system/${SERVICE_NAME}.service <<EOF
 [Unit]
@@ -77,6 +71,14 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
+
+# Restart service (always, to ensure new code is running)
+if [ -n "$INSTALLED_VERSION" ]; then
+  echo "==> Upgrading from ${INSTALLED_VERSION} to ${LATEST}..."
+fi
+echo "==> Restarting service..."
+systemctl restart "$SERVICE_NAME"
+
 systemctl enable --now "$SERVICE_NAME"
 
 echo ""
