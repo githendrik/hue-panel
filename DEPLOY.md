@@ -71,3 +71,28 @@ Hue bridge always connects.
 - **Random offset** — each timer can add ±N minutes randomness to make lighting look natural.
 - **Single binary** — `npm run build` produces a self-contained `.output/` directory
   with only the compiled server. No `node_modules` needed at runtime.
+
+---
+
+## Release procedure
+
+To trigger the GitHub Actions release pipeline, you must create and push a git tag:
+
+```bash
+# 1. Update version in package.json
+# 2. Commit the change
+git add package.json
+git commit -m "bump version to 0.1.1"
+
+# 3. Create a tag with 'v' prefix (matches workflow trigger 'v*')
+git tag v0.1.1
+
+# 4. Push the tag to trigger the release workflow
+git push origin v0.1.1
+```
+
+The workflow at `.github/workflows/release.yml` triggers on `push: tags: - 'v*'` and will:
+- Build the Nuxt app
+- Run smoke tests
+- Create a release archive with the `.output/` folder
+- Publish a GitHub Release with the binary and install script
