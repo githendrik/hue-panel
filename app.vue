@@ -11,8 +11,16 @@
     <main class="content">
       <NuxtPage />
     </main>
+    <footer class="footer">
+      <span>v{{ version }}</span>
+    </footer>
   </div>
 </template>
+
+<script setup>
+import pkg from './package.json'
+const version = pkg.version
+</script>
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -107,4 +115,13 @@ h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: .75rem; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  border-top: 1px solid #334155;
+  background: #1e293b;
+}
 </style>
