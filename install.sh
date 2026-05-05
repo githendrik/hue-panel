@@ -29,8 +29,8 @@ echo "==> Latest release: ${LATEST}"
 
 # Check existing version before upgrade
 INSTALLED_VERSION=""
-if [ -f "$INSTALL_DIR/package.json" ]; then
-  INSTALLED_VERSION=$(grep '"version"' "$INSTALL_DIR/package.json" | sed 's/.*"version": "\(.*\)".*/\1/')
+if [ -f "$INSTALL_DIR/VERSION" ]; then
+  INSTALLED_VERSION=$(cat "$INSTALL_DIR/VERSION")
   echo "==> Installed version: ${INSTALLED_VERSION}"
 fi
 
@@ -44,12 +44,14 @@ mkdir -p "$INSTALL_DIR" "$DATA_DIR"
 tar -xzf "$TMP/$ARCHIVE" -C "$INSTALL_DIR"
 rm -rf "$TMP"
 
+# Write version marker
+echo "$LATEST" > "$INSTALL_DIR/VERSION"
+
 echo "==> Extracted to $INSTALL_DIR"
 
 # Check if this is an upgrade and restart service if needed
-NEW_VERSION=$(grep '"version"' "$INSTALL_DIR/package.json" | sed 's/.*"version": "\(.*\)".*/\1/')
-if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$NEW_VERSION" ]; then
-  echo "==> Upgrading from ${INSTALLED_VERSION} to ${NEW_VERSION} - restarting service..."
+if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$LATEST" ]; then
+  echo "==> Upgrading from ${INSTALLED_VERSION} to ${LATEST} - restarting service..."
   systemctl restart "$SERVICE_NAME"
 fi
 
