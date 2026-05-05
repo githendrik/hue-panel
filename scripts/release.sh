@@ -21,6 +21,7 @@ git add package.json
 git commit -m "release: v$VERSION"
 git tag "v$VERSION"
 git push origin "v$VERSION"
+git push origin main
 
 echo "==> Released v$VERSION"
 echo "==> https://github.com/githendrik/hue-panel/releases/tag/v$VERSION"
